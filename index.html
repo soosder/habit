@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<title>Dopamin Paradise</title>
+<style>
+  :root{
+    --bg:#0b1020;
+    --bg2:#131a33;
+    --ink:#f4f7ff;
+    --muted:#aab4d0;
+    --glass:rgba(255,255,255,.08);
+    --glass2:rgba(255,255,255,.13);
+    --line:rgba(255,255,255,.14);
+    --pink:#ff5fa2;
+    --cyan:#67e8f9;
+    --gold:#ffd166;
+    --purple:#a78bfa;
+    --green:#7ef0a5;
+    --shadow:0 24px 80px rgba(0,0,0,.38);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:
+    radial-gradient(circle at 15% 10%,rgba(255,95,162,.22),transparent 32%),
+    radial-gradient(circle at 85% 15%,rgba(103,232,249,.18),transparent 30%),
+    radial-gradient(circle at 50% 90%,rgba(167,139,250,.20),transparent 38%),
+    linear-gradient(145deg,var(--bg),var(--bg2));}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;background-image:radial-gradient(rgba(255,255,255,.10) 1px,transparent 1px);background-size:22px 22px;mask-image:linear-gradient(to bottom,black,transparent 70%)}
+  #app{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:18px 14px 120px}
+  .orb{position:fixed;border-radius:50%;filter:blur(70px);opacity:.35;pointer-events:none;z-index:0}
+  .orb.a{width:320px;height:320px;background:#ff5fa2;top:-80px;left:-80px}
+  .orb.b{width:360px;height:360px;background:#67e8f9;bottom:-120px;right:-100px}
+  .glass{background:linear-gradient(145deg,var(--glass),rgba(255,255,255,.05));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+  .muted{color:var(--muted)}
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .between{justify-content:space-between}
+  .grid{display:grid;gap:14px}
+  .grid.cols-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .grid.cols-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .btn{appearance:none;border:1px solid rgba(255,255,255,.16);background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06));color:var(--ink);border-radius:999px;padding:11px 16px;font-weight:800;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,background .15s ease;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 16px 40px rgba(0,0,0,.28)}
+  .btn:active{transform:translateY(0) scale(.98)}
+  .btn.primary{background:linear-gradient(135deg,#ff5fa2,#a78bfa);border-color:rgba(255,255,255,.25)}
+  .btn.cyan{background:linear-gradient(135deg,#67e8f9,#7ef0a5);color:#07111f;border-color:rgba(255,255,255,.2)}
+  .btn.ghost{background:rgba(255,255,255,.06)}
+  .btn.small{padding:8px 12px;font-size:.9rem}
+  .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+  .input,select,textarea{width:100%;border:1px solid var(--line);background:rgba(5,8,18,.45);color:var(--ink);border-radius:18px;padding:12px 14px;font:inherit;outline:none}
+  .input:focus,select:focus,textarea:focus{border-color:rgba(103,232,249,.65);box-shadow:0 0 0 4px rgba(103,232,249,.12)}
+  textarea{min-height:110px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85rem}
+  label{display:block;font-size:.8rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin:0 0 7px}
+  .card{padding:18px}
+  .card h2,.card h3{margin:0 0 10px}
+  .card h2{font-size:1.15rem}
+  .card h3{font-size:1rem}
+  .hero{position:relative;overflow:hidden;padding:22px}
+  .hero::after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-90px;top:-110px;background:radial-gradient(circle,rgba(255,209,102,.55),transparent 65%);filter:blur(10px)}
+  .title{font-size:clamp(2rem,7vw,4.2rem);line-height:.9;font-weight:950;letter-spacing:-.06em;margin:0;background:linear-gradient(90deg,#fff,#ffd166 30%,#ff5fa2 55%,#67e8f9 80%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 10px 30px rgba(255,95,162,.25))}
+  .subtitle{color:var(--muted);margin:8px 0 0;font-weight:650}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:16px}
+  .stat{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:20px;padding:12px;text-align:center}
+  .stat b{display:block;font-size:1.35rem}
+  .stat span{font-size:.75rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+  .xpbar{height:12px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden;border:1px solid rgba(255,255,255,.12);margin-top:10px}
+  .xpfill{height:100%;width:0;background:linear-gradient(90deg,#67e8f9,#a78bfa,#ff5fa2);transition:width .6s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 24px rgba(167,139,250,.7)}
+  .section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:26px 0 12px}
+  .section-title h2{margin:0;font-size:1.35rem;letter-spacing:-.03em}
+  .module{position:relative;min-height:220px;overflow:hidden}
+  .module.locked{filter:saturate(.5) brightness(.78)}
+  .lock{position:absolute;inset:0;display:grid;place-items:center;background:rgba(5,8,18,.52);backdrop-filter:blur(3px);border-radius:28px;z-index:2}
+  .lock .pill{background:rgba(255,255,255,.12);border:1px solid var(--line);padding:10px 14px;border-radius:999px;font-weight:900}
+  .badge{width:86px;height:86px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.55),rgba(255,255,255,.08) 42%,rgba(0,0,0,.25));border:1px solid rgba(255,255,255,.28);box-shadow:inset 0 0 24px rgba(255,255,255,.18),0 18px 40px rgba(0,0,0,.28);font-weight:950}
+  .quest-card{border-left:5px solid var(--pink)}
+  .chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-size:.82rem;font-weight:800}
+  .list{display:grid;gap:10px}
+  .item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px;border-radius:18px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.10)}
+  .item .meta{font-size:.82rem;color:var(--muted)}
+  .icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--ink);cursor:pointer;font-weight:900}
+  .icon-btn:hover{background:rgba(255,255,255,.16)}
+  .crate-scene{display:grid;place-items:center;min-height:190px;position:relative}
+  .crate{position:relative;width:190px;height:150px;filter:drop-shadow(0 24px 30px rgba(0,0,0,.35))}
+  .crate-body{position:absolute;left:14px;right:14px;bottom:8px;height:92px;border-radius:18px;background:linear-gradient(145deg,#8a5a2b,#5b3418 55%,#3d2210);border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 0 30px rgba(0,0,0,.28)}
+  .crate-body::before,.crate-body::after{content:"";position:absolute;top:12px;bottom:12px;width:10px;border-radius:999px;background:linear-gradient(90deg,#ffd166,#b7791f,#ffd166)}
+  .crate-body::before{left:18px}.crate-body::after{right:18px}
+  .crate-lid{position:absolute;left:4px;right:4px;top:18px;height:52px;border-radius:20px 20px 12px 12px;background:linear-gradient(145deg,#c98a3d,#7a4b1d 60%,#4d2a10);border:1px solid rgba(255,255,255,.28);transform-origin:50% 100%;transition:transform .55s cubic-bezier(.2,.9,.2,1.2),top .55s ease;box-shadow:0 10px 24px rgba(0,0,0,.28)}
+  .crate.open .crate-lid{transform:translateY(-58px) rotate(-16deg);top:6px}
+  .crate-glow{position:absolute;left:50%;top:55px;width:120px;height:120px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,224,130,.85),rgba(255,95,162,.25) 45%,transparent 70%);opacity:0;transition:opacity .4s ease;filter:blur(8px)}
+  .crate.open .crate-glow{opacity:.9}
+  .crate.open .crate-body{background:linear-gradient(145deg,#ffd166,#ff5fa2 55%,#a78bfa)}
+  .loot{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:14px;border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.16)}
+  .loot img{width:86px;height:86px}
+  .plot{aspect-ratio:1;border-radius:22px;border:1px solid var(--line);background:rgba(255,255,255,.07);display:grid;place-items:center;text-align:center;padding:10px;font-weight:800;cursor:pointer;transition:transform .15s ease,background .15s ease}
+  .plot:hover{transform:translateY(-2px);background:rgba(255,255,255,.12)}
+  .plot.built{background:linear-gradient(135deg,rgba(126,240,165,.20),rgba(103,232,249,.14));border-color:rgba(126,240,165,.45)}
+  .person{display:flex;gap:12px;align-items:center;padding:12px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+  .avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--pink),var(--purple));font-weight:950;border:2px solid rgba(255,255,255,.35)}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(30px);background:rgba(10,14,28,.92);border:1px solid rgba(255,255,255,.16);padding:12px 16px;border-radius:999px;opacity:0;transition:.25s ease;z-index:50;box-shadow:var(--shadow);font-weight:800;max-width:calc(100vw - 28px);text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.good{border-color:rgba(126,240,165,.5)}
+  .toast.bad{border-color:rgba(255,120,120,.5)}
+  .confetti-piece{position:fixed;width:10px;height:14px;border-radius:3px;z-index:60;pointer-events:none;animation:confetti-fly 1s ease-out forwards}
+  @keyframes confetti-fly{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot))}}
+  @keyframes pulse-glow{0%,100%{box-shadow:0 0 0 0 rgba(255,95,162,.35)}50%{box-shadow:0 0 0 14px rgba(255,95,162,0)}}
+  .pulse{animation:pulse-glow 1.6s ease-in-out infinite}
+  details{border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.05);padding:14px}
+  summary{cursor:pointer;font-weight:900}
+  .foot{margin-top:22px;color:var(--muted);font-size:.85rem;text-align:center}
+  @media (max-width:640px){#app{padding:12px 10px 100px}.card{padding:16px}.crate{transform:scale(.9)}}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="orb a"></div><div class="orb b"></div>
+<div id="app"></div>
+<input id="stateFile" type="file" accept="application/json,.json" hidden>
+<input id="dropFile" type="file" accept="application/json,.json" hidden>
+<script>
+(() => {
+'use strict';
+const APP_KEY = 'dopamine-paradise-state-v1';
+const LEVEL_XP = [0, 80, 180, 320, 500, 720, 980];
+const MODULE_UNLOCK = { crate: 2, paradise: 3, crew: 4, story: 5 };
+const KIND_LABEL = { quest: 'Quest', loot: 'Loot', story: 'Story', paradise: 'Paradise', crew: 'Crew' };
+const RARITY_COLOR = { common: '#8be9fd', rare: '#a78bfa', epic: '#ff5fa2', legendary: '#ffd166' };
+const PLOT_DEFS = [
+  { id: 'bank', name: 'Sonnenbank', cost: 15 },
+  { id: 'lamp', name: 'Lichterkette', cost: 20 },
+  { id: 'tree', name: 'Glücksbaum', cost: 25 },
+  { id: 'pond', name: 'Klarteich', cost: 30 },
+  { id: 'bridge', name: 'Regenbogenbrücke', cost: 40 },
+  { id: 'statue', name: 'Dopamin-Skulptur', cost: 55 }
+];
+const CREW_NAMES = ['Nova', 'Pixel', 'Momo', 'Zed', 'Luna', 'Echo', 'Blaise', 'Kiki'];
+const CREW_ROLES = ['Motivator', 'Loot-Koordinator', 'Story-Guide', 'Paradies-Architekt', 'Kistenwächter', 'XP-Sammler'];
+const FRIEND_NAMES = ['Ari', 'Juno', 'Max', 'Sana', 'Theo', 'Vera'];
+
+let memoryStore = {};
+let storageMode = detectStorage();
+let state = loadState();
+const app = document.getElementById('app');
+
+function detectStorage() {
+  try {
+    const key = '__dp_probe__';
+    localStorage.setItem(key, '1');
+    localStorage.removeItem(key);
+    return 'localStorage';
+  } catch (e) {
+    try {
+      const old = window.name || '';
+      const probe = JSON.stringify({ v: 1, k: '__dp_probe__', data: '1' });
+      window.name = probe;
+      const ok = window.name === probe;
+      window.name = old;
+      return ok ? 'window.name' : 'memory';
+    } catch (e2) {
+      return 'memory';
+    }
+  }
+}
+
+function storageGet(key) {
+  if (storageMode === 'localStorage') {
+    try {
+      const value = localStorage.getItem(key);
+      if (value !== null) return value;
+      return null;
+    } catch (e) {
+      storageMode = 'window.name';
+    }
+  }
+  if (storageMode === 'window.name') {
+    try {
+      const raw = window.name || '';
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.k === key) return parsed.data ?? null;
+      return null;
+    } catch (e) {
+      storageMode = 'memory';
+    }
+  }
+  return memoryStore[key] ?? null;
+}
+
+function storageSet(key, value) {
+  const data = String(value);
+  if (storageMode === 'localStorage') {
+    try {
+      localStorage.setItem(key, data);
+      return true;
+    } catch (e) {
+      storageMode = 'window.name';
+    }
+  }
+  if (storageMode === 'window.name') {
+    try {
+      window.name = JSON.stringify({ v: 1, k: key, data });
+      return true;
+    } catch (e) {
+      storageMode = 'memory';
+    }
+  }
+  memoryStore[key] = data;
+  return true;
+}
+
+function uid(prefix) {
+  return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function nowIso() {
+  return new Date().toISOString();
+}
+
+function defaultState() {
+  return {
+    version: 1,
+    concepts: [
+      { id: uid('concept'), text: '10 Minuten an die frische Luft', kind: 'quest', active: true, created_at: nowIso() },
+      { id: uid('concept'), text: 'Eine Mini-Kiste öffnen', kind: 'loot', active: true, created_at: nowIso() },
+      { id: uid('concept'), text: 'Erstes Paradies-Beet pflanzen', kind: 'paradise', active: true, created_at: nowIso() }
+    ],
+    progress: { xp: 0, coins: 0, completed: 0, streak: 0, lastDay: null },
+    activeQuest: null,
+    pendingDaily: null,
+    dropQueue: [],
+    seenDropIds: [],
+    importedDrops: [],
+    lastCrateTemplate: null,
+    lastLoot: null,
+    lastSync: null,
+    claimedCrates: {},
+    storyChapters: [
+      { id: uid('story'), title: 'Kapitel 0 – Die erste Belohnung', text: 'Du hast das Paradies aktiviert. Jeder kleine Schritt füllt den Himmel mit Licht.', source: 'local', created_at: nowIso() }
+    ],
+    paradise: { plots: PLOT_DEFS.map(p => ({ ...p, built: false })) },
+    crew: [],
+    friends: [],
+    meta: { storage: storageMode, created_at: nowIso() }
+  };
+}
+
+function ensureArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function normalizeState(input) {
+  const base = defaultState();
+  const s = input && typeof input === 'object' ? input : {};
+  const out = {
+    ...base,
+    ...s,
+    version: 1,
+    concepts: ensureArray(s.concepts).map(c => ({
+      id: c.id || uid('concept'),
+      text: String(c.text || '').slice(0, 220),
+      kind: KIND_LABEL[c.kind] ? c.kind : 'quest',
+      active: c.active !== false,
+      created_at: c.created_at || nowIso()
+    })).filter(c => c.text),
+    progress: {
+      xp: Math.max(0, Number(s.progress?.xp) || 0),
+      coins: Math.max(0, Number(s.progress?.coins) || 0),
+      completed: Math.max(0, Number(s.progress?.completed) || 0),
+      streak: Math.max(0, Number(s.progress?.streak) || 0),
+      lastDay: s.progress?.lastDay || null
+    },
+    activeQuest: s.activeQuest && typeof s.activeQuest === 'object' ? s.activeQuest : null,
+    pendingDaily: s.pendingDaily && typeof s.pendingDaily === 'object' ? s.pendingDaily : null,
+    dropQueue: ensureArray(s.dropQueue).slice(0, 200),
+    seenDropIds: ensureArray(s.seenDropIds).slice(-500),
+    importedDrops: ensureArray(s.importedDrops).slice(0, 40),
+    lastCrateTemplate: s.lastCrateTemplate && typeof s.lastCrateTemplate === 'object' ? s.lastCrateTemplate : null,
+    lastLoot: s.lastLoot && typeof s.lastLoot === 'object' ? s.lastLoot : null,
+    lastSync: s.lastSync && typeof s.lastSync === 'object' ? s.lastSync : null,
+    claimedCrates: s.claimedCrates && typeof s.claimedCrates === 'object' ? s.claimedCrates : {},
+    storyChapters: ensureArray(s.storyChapters).slice(0, 80),
+    paradise: {
+      plots: ensureArray(s.paradise?.plots).length ? s.paradise.plots.map((p, i) => ({
+        ...PLOT_DEFS[i % PLOT_DEFS.length],
+        ...p,
+        built: !!p.built
+      })) : PLOT_DEFS.map(p => ({ ...p, built: false }))
+    },
+    crew: ensureArray(s.crew).slice(0, 24),
+    friends: ensureArray(s.friends).slice(0, 24),
+    meta: { ...(s.meta || {}), storage: storageMode }
+  };
+  if (!out.concepts.length) out.concepts = base.concepts;
+  if (!out.storyChapters.length) out.storyChapters = base.storyChapters;
+  return out;
+}
+
+function loadState() {
+  const raw = storageGet(APP_KEY);
+  if (!raw) return defaultState();
+  try {
+    return normalizeState(JSON.parse(raw));
+  } catch (e) {
+    return defaultState();
+  }
+}
+
+function save() {
+  state.meta.storage = storageMode;
+  storageSet(APP_KEY, JSON.stringify(state));
+}
+
+function persist() {
+  save();
+  render();
+}
+
+function levelFromXp(xp) {
+  let level = 1;
+  for (let i = 1; i < LEVEL_XP.length; i++) if (xp >= LEVEL_XP[i]) level = i + 1;
+  return level;
+}
+
+function nextLevelXp(level) {
+  return level < LEVEL_XP.length ? LEVEL_XP[level] : null;
+}
+
+function levelProgress(xp) {
+  const level = levelFromXp(xp);
+  const start = LEVEL_XP[level - 1];
+  const end = nextLevelXp(level);
+  if (end === null) return { level, pct: 100, into: 0, span: 1 };
+  const span = Math.max(1, end - start);
+  const into = Math.max(0, xp - start);
+  return { level, pct: Math.min(100, Math.round((into / span) * 100)), into, span };
+}
+
+function addXp(amount) {
+  const before = levelFromXp(state.progress.xp);
+  state.progress.xp += amount;
+  const after = levelFromXp(state.progress.xp);
+  return { gained: amount, leveled: after > before, level: after };
+}
+
+function addCoins(amount) {
+  state.progress.coins = Math.max(0, state.progress.coins + amount);
+}
+
+function updateStreak() {
+  const today = todayKey();
+  const last = state.progress.lastDay;
+  if (last === today) return;
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yKey = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+  state.progress.streak = last === yKey ? state.progress.streak + 1 : 1;
+  state.progress.lastDay = today;
+}
+
+function toast(message, kind = '') {
+  const old = document.querySelector('.toast');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.className = `toast ${kind}`;
+  el.textContent = message;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => {
+    el.classList.remove('show');
+    setTimeout(() => el.remove(), 280);
+  }, 2600);
+}
+
+function burst(x = innerWidth / 2, y = innerHeight / 3, count = 28) {
+  const colors = ['#ff5fa2', '#67e8f9', '#ffd166', '#a78bfa', '#7ef0a5'];
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    const color = colors[i % colors.length];
+    const dx = (Math.random() - 0.5) * 260;
+    const dy = -40 - Math.random() * 220;
+    const rot = (Math.random() - 0.5) * 720;
+    p.style.left = `${x}px`;
+    p.style.top = `${y}px`;
+    p.style.background = color;
+    p.style.setProperty('--dx', `${dx}px`);
+    p.style.setProperty('--dy', `${dy}px`);
+    p.style.setProperty('--rot', `${rot}deg`);
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1100);
+  }
+}
+
+function randomOf(list, seed = Math.random()) {
+  return list[Math.floor(seed * list.length) % list.length];
+}
+
+function badgeSVG(rarity = 'common') {
+  const color = RARITY_COLOR[rarity] || RARITY_COLOR.common;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g" cx="35%" cy="30%" r="80%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".85"/><stop offset="35%" stop-color="${color}"/><stop offset="100%" stop-color="#0b1020"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#g)" stroke="rgba(255,255,255,.55)" stroke-width="3"/><path d="M50 18l9 20 22 2-16 15 5 22-20-11-20 11 5-22-16-15 22-2z" fill="rgba(255,255,255,.92)"/><circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="2"/></svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+function activeConcepts() {
+  const list = state.concepts.filter(c => c.active !== false);
+  return list.length ? list : state.concepts;
+}
+
+function generateLoot(template = null) {
+  const roll = Math.random();
+  const rarity = template?.rarity || (roll > 0.96 ? 'legendary' : roll > 0.82 ? 'epic' : roll > 0.58 ? 'rare' : 'common');
+  const mult = { common: 1, rare: 1.5, epic: 2.2, legendary: 3.5 }[rarity] || 1;
+  const types = ['coins', 'xp', 'concept', 'story', 'crew'];
+  const type = template?.loot?.type || randomOf(types);
+  const loot = {
+    id: uid('loot'),
+    type,
+    rarity,
+    coins: template?.loot?.coins ?? Math.round((5 + Math.floor(Math.random() * 15)) * mult),
+    xp: template?.loot?.xp ?? Math.round((8 + Math.floor(Math.random() * 18)) * mult),
+    title: template?.loot?.title || `${rarity[0].toUpperCase() + rarity.slice(1)}-Belohnung`,
+    text: template?.loot?.text || 'Die Kiste hat ein surprises Paket für dich.',
+    badge: badgeSVG(rarity),
+    created_at: nowIso()
+  };
+  if (type === 'concept' && !template) {
+    const c = randomOf(activeConcepts());
+    loot.text = `Neues Konzept: ${c.text}`;
+  }
+  if (type === 'story' && !template) {
+    loot.text = 'Ein mysterielles Story-Kapitel wurde freigeschaltet.';
+  }
+  return loot;
+}
+
+function applyLoot(loot) {
+  if (!loot) return;
+  if (loot.coins) addCoins(loot.coins);
+  if (loot.xp) addXp(loot.xp);
+  if (loot.type === 'concept') {
+    const concept = activeConcepts()[Math.floor(Math.random() * Math.max(1, activeConcepts().length))];
+    if (concept) state.concepts.push({ id: uid('concept'), text: `${concept.text} (aus Kiste)`, kind: concept.kind || 'quest', active: true, created_at: nowIso() });
+  }
+  if (loot.type === 'story') {
+    addStoryChapter(randomOf(activeConcepts())?.text || 'Ein Funken aus der Kiste', 'Kisten-Loot');
+  }
+  if (loot.type === 'crew' && state.crew.length < 24) {
+    recruitCrew(true);
+  }
+  state.lastLoot = loot;
+}
+
+function latestCrateTemplate() {
+  if (state.lastCrateTemplate) return state.lastCrateTemplate;
+  for (const drop of state.importedDrops) {
+    if (drop.crate) return drop.crate;
+  }
+  return null;
+}
+
+function openCrate(kind = 'mini', event = null) {
+  const today = todayKey();
+  const key = kind === 'daily' ? `daily_${today}` : `mini_${today}`;
+  if (state.claimedCrates[key]) {
+    toast('Diese Kiste wurde heute schon geöffnet.', 'bad');
+    return;
+  }
+  if (kind === 'mini' && state.progress.coins < 15) {
+    toast('Nicht genug Münzen für eine Mini-Kiste (15 nötig).', 'bad');
+    return;
+  }
+  if (kind === 'mini') addCoins(-15);
+  state.claimedCrates[key] = nowIso();
+  const template = kind === 'daily' ? latestCrateTemplate() : null;
+  const loot = generateLoot(template);
+  applyLoot(loot);
+  persist();
+  const crate = document.querySelector('.crate');
+  if (crate) crate.classList.add('open');
+  setTimeout(() => burst(event?.clientX || innerWidth / 2, event?.clientY || innerHeight / 2, 42), 420);
+  toast(`${loot.rarity} Loot: +${loot.coins || 0} Münzen, +${loot.xp || 0} XP`, 'good');
+}
+
+function addStoryChapter(seedText, source = 'lokal') {
+  const concept = activeConcepts()[Math.floor(Math.random() * Math.max(1, activeConcepts().length))];
+  const title = `Kapitel ${state.storyChapters.length + 1} – ${seedText ? String(seedText).slice(0, 34) : 'Neuer Funken'}`;
+  const text = `Aus dem Impuls „${concept?.text || seedText || 'eine kleine Tat'}“ entsteht eine Szene: Die Stadt leuchtet auf, eine Kiste schwebt herein, und das Paradies rückt ein Stück näher.`;
+  state.storyChapters.unshift({ id: uid('story'), title, text, source, created_at: nowIso() });
+  state.storyChapters = state.storyChapters.slice(0, 80);
+}
+
+function normalizeDropObject(input) {
+  if (!input || typeof input !== 'object') throw new Error('Kein gültiges JSON-Objekt.');
+  const queue = ensureArray(input.unused_queue || input.queue || input.buffer).map((item, i) => ({
+    id: item.id || `drop_${Date.now()}_${i}`,
+    type: ['quest', 'mini_quest', 'loot', 'story', 'paradise', 'crew'].includes(item.type) ? item.type : 'quest',
+    title: String(item.title || item.name || `Drop ${i + 1}`).slice(0, 140),
+    text: String(item.text || item.description || '').slice(0, 500),
+    focus_minutes: Math.max(0, Number(item.focus_minutes || item.focusMinutes) || 0),
+    reward_xp: Math.max(0, Number(item.reward_xp ?? item.xp) || 0),
+    reward_coins: Math.max(0, Number(item.reward_coins ?? item.coins) || 0),
+    rarity: item.rarity || 'common',
+    loot: item.loot && typeof item.loot === 'object' ? item.loot : null,
+    created_at: item.created_at || nowIso()
+  }));
+  return {
+    generated_at: input.generated_at || nowIso(),
+    source: input.source || 'import',
+    buffer_before: Number(input.buffer_before) || 0,
+    buffer_after: Number(input.buffer_after ?? queue.length) || queue.length,
+    unused_queue: queue,
+    daily: input.daily && typeof input.daily === 'object' ? input.daily : null,
+    story: input.story && typeof input.story === 'object' ? input.story : null,
+    crate: input.crate && typeof input.crate === 'object' ? input.crate : null
+  };
+}
+
+function importDropObject(input, sourceName) {
+  const drop = normalizeDropObject(input);
+  const seen = new Set(state.seenDropIds || []);
+  let added = 0;
+  for (const item of drop.unused_queue) {
+    const key = item.id || `${item.title}_${item.created_at}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      state.dropQueue.push({ ...item, import_source: sourceName });
+      added++;
+    }
+  }
+  state.seenDropIds = Array.from(seen).slice(-500);
+  state.dropQueue = state.dropQueue.slice(-200);
+  state.importedDrops.unshift({
+    id: uid('drop'),
+    source: sourceName,
+    imported_at: nowIso(),
+    generated_at: drop.generated_at,
+    drop_source: drop.source,
+    buffer_before: drop.buffer_before,
+    buffer_after: drop.buffer_after,
+    queue_count: drop.unused_queue.length,
+    daily: drop.daily,
+    story: drop.story,
+    crate: drop.crate
+  });
+  state.importedDrops = state.importedDrops.slice(0, 40);
+  if (drop.daily) state.pendingDaily = drop.daily;
+  if (drop.story && (drop.story.title || drop.story.text)) {
+    state.storyChapters.unshift({
+      id: uid('story'),
+      title: String(drop.story.title || 'Drop-Story').slice(0, 120),
+      text: String(drop.story.text || '').slice(0, 1200),
+      source: sourceName,
+      created_at: nowIso()
+    });
+    state.storyChapters = state.storyChapters.slice(0, 80);
+  }
+  if (drop.crate) state.lastCrateTemplate = drop.crate;
+  state.lastSync = { type: 'daily_drop', source: sourceName, at: nowIso(), queue_added: added, buffer_before: drop.buffer_before, buffer_after: drop.buffer_after };
+  persist();
+  toast(`Drop importiert: ${added} neue Queue-Einträge.`, 'good');
+  burst(innerWidth / 2, innerHeight / 2, 24);
+}
+
+function parseJsonText(text, label) {
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    throw new Error(`${label}: kein gültiges JSON (${e.message})`);
+  }
+}
+
+function moduleCard(id, title, subtitle, level, inner) {
+  const unlocked = levelFromXp(state.progress.xp) >= level;
+  const need = nextLevelXp(level - 1);
+  return `<section class="card glass module ${unlocked ? '' : 'locked'}" data-module="${id}">
+    ${unlocked ? '' : `<div class="lock"><div class="pill">Ab Level ${level}</div></div>`}
+    <div class="row between"><div><h2>${esc(title)}</h2><div class="muted">${esc(subtitle)}</div></div><span class="chip">Level ${level}</span></div>
+    <div style="margin-top:14px">${unlocked ? inner : `<div class="muted">Schalte weiter Aufgaben frei, um ${esc(title)} zu öffnen.</div>`}</div>
+  </section>`;
+}
+
+function renderStats() {
+  const p = levelProgress(state.progress.xp);
+  return `<div class="stats">
+    <div class="stat"><b>${p.level}</b><span>Level</span></div>
+    <div class="stat"><b>${state.progress.xp}</b><span>XP</span></div>
+    <div class="stat"><b>${state.progress.coins}</b><span>Münzen</span></div>
+    <div class="stat"><b>${state.progress.completed}</b><span>Geschafft</span></div>
+    <div class="stat"><b>${state.progress.streak}</b><span>Serie</span></div>
+  </div>
+  <div class="xpbar"><div class="xpfill" style="width:${p.pct}%"></div></div>
+  <div class="muted" style="margin-top:8px;font-size:.85rem">${p.pct}% bis Level ${p.level + 1}${p.level >= LEVEL_XP.length ? ' · Max-Level' : ` (${Math.max(0, (nextLevelXp(p.level) || 0) - state.progress.xp)} XP fehlen)`}</div>`;
+}
+
+function renderHero() {
+  const q = state.activeQuest;
+  const daily = state.pendingDaily;
+  const pendingHtml = daily ? `<div class="card glass quest-card" style="margin-top:14px">
+      <div class="row between"><div><h3>Tages-Impuls aus daily_drop.json</h3><div class="muted">${esc(daily.title || daily.text || 'Neue Quest aus dem Drop')}</div></div><span class="chip">${esc(daily.source || 'drop')}</span></div>
+      <div class="row" style="margin-top:12px"><button class="btn primary small" data-action="use-pending-daily">Übernehmen</button><button class="btn ghost small" data-action="dismiss-pending-daily">Später</button></div>
+    </div>` : '';
+  const activeHtml = q ? `<div class="card glass quest-card" style="margin-top:14px">
+      <div class="row between"><div><h3>Aktive Aufgabe</h3><div>${esc(q.title)}</div><div class="muted">${q.focus_minutes ? `${q.focus_minutes} Fokus-Minuten · ` : ''}Wert: +${(q.reward_xp || 0) + 40 + (q.focus_minutes || 0) * 2} XP, +${(q.reward_coins || 0) + 6 + (q.focus_minutes || 0)} Münzen</div></div><span class="chip pulse">Läuft</span></div>
+      <div class="row" style="margin-top:12px"><button class="btn cyan" data-action="complete-quest">Erledigt (+XP/Münzen)</button><button class="btn ghost small" data-action="cancel-quest">Abbrechen</button></div>
+    </div>` : `<div class="card glass" style="margin-top:14px">
+      <div class="row" style="align-items:end">
+        <div style="flex:1;min-width:220px"><label for="taskTitle">Erste Aufgabe / heutiger Impuls</label><input id="taskTitle" class="input" placeholder="z. B. 10 Minuten stretchen" autocomplete="off"></div>
+        <div style="width:130px"><label for="focusMinutes">Fokus-Min.</label><input id="focusMinutes" class="input" type="number" min="0" max="240" value="15"></div>
+        <button class="btn primary" data-action="start-task">Starten</button>
+      </div>
+      <div class="muted" style="margin-top:10px;font-size:.85rem">Tipp: Je klarer die Aufgabe, desto höher die Dopamin-Ausbeute.</div>
+    </div>`;
+  return `<section class="card glass hero">
+    <div class="title">DOPAMIN<br>PARADISE</div>
+    <p class="subtitle">Kleine Aufgaben, große Belohnungen. Schalte Kisten, Paradies, Crew und Story frei.</p>
+    ${renderStats()}
+    ${activeHtml}
+    ${pendingHtml}
+  </section>`;
+}
+
+function renderCrate() {
+  const today = todayKey();
+  const dailyOpen = !!state.claimedCrates[`daily_${today}`];
+  const miniOpen = !!state.claimedCrates[`mini_${today}`];
+  const template = latestCrateTemplate();
+  const loot = state.lastLoot;
+  const lootHtml = loot ? `<div class="loot" style="margin-top:14px"><img src="${esc(loot.badge)}" alt="Loot Badge"><div><div class="chip">${esc(loot.rarity)}</div><h3 style="margin:6px 0">${esc(loot.title)}</h3><div class="muted">${esc(loot.text)}</div><div class="meta" style="margin-top:6px">+${loot.coins || 0} Münzen · +${loot.xp || 0} XP</div></div></div>` : '<div class="muted" style="margin-top:12px">Noch keine Kiste geöffnet. Die erste Belohnung wartet.</div>';
+  return moduleCard('crate', 'Kisten & Loot', 'Runde Badges, Klappdeckel und Belohnungen', MODULE_UNLOCK.crate, `
+    <div class="crate-scene">
+      <div class="crate" id="crateVisual"><div class="crate-lid"></div><div class="crate-body"></div><div class="crate-glow"></div></div>
+    </div>
+    <div class="row" style="justify-content:center;margin-top:8px">
+      <button class="btn primary" data-action="open-crate" data-param='{"kind":"daily"}' ${dailyOpen ? 'disabled' : ''}>${dailyOpen ? 'Daily-Kiste offen' : 'Daily-Drop-Kiste öffnen'}</button>
+      <button class="btn cyan" data-action="open-crate" data-param='{"kind":"mini"}' ${miniOpen ? 'disabled' : ''}>${miniOpen ? 'Mini-Kiste offen' : 'Mini-Kiste (-15 Münzen)'}</button>
+    </div>
+    <div class="muted" style="margin-top:8px;font-size:.82rem;text-align:center">${template ? 'Daily-Template geladen.' : 'Kein Drop-Template geladen – lokale Loot-Engine aktiv.'}</div>
+    ${lootHtml}`);
+}
+
+function renderParadise() {
+  const built = state.paradise.plots.filter(p => p.built).length;
+  const items = state.paradise.plots.map((p, i) => `<button class="plot ${p.built ? 'built' : ''}" data-action="build-plot" data-param='{"index":${i}}' ${p.built ? 'disabled' : ''}>${esc(p.name)}<br><span class="muted">${p.built ? 'Gebaut' : `${p.cost} Münzen`}</span></button>`).join('');
+  return moduleCard('paradise', 'Paradies-Aufbau', `${built}/${state.paradise.plots.length} Parzellen bebaut`, MODULE_UNLOCK.paradise, `
+    <div class="xpbar" style="margin-bottom:12px"><div class="xpfill" style="width:${Math.round((built / Math.max(1, state.paradise.plots.length)) * 100)}%"></div></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">${items}</div>`);
+}
+
+function renderCrew() {
+  const crew = state.crew.map(c => `<div class="person"><div class="avatar">${esc((c.name || '?')[0])}</div><div style="flex:1"><b>${esc(c.name)}</b><div class="muted">${esc(c.role)} · Laune ${c.mood}%</div></div><span class="chip">${esc(c.role)}</span></div>`).join('');
+  const friends = state.friends.map(f => `<div class="person"><div class="avatar" style="background:linear-gradient(135deg,#67e8f9,#7ef0a5)">${esc((f.name || '?')[0])}</div><div><b>${esc(f.name)}</b><div class="muted">Freund aus dem Drop</div></div></div>`).join('');
+  return moduleCard('crew', 'Begleiter & Crew', 'Rekrutiere Helfer, Freunde und Mood-Booster', MODULE_UNLOCK.crew, `
+    <div class="row" style="margin-bottom:12px"><button class="btn primary small" data-action="recruit-crew">Begleiter rekrutieren (25 Münzen)</button><button class="btn cyan small" data-action="invite-friend">Freund einladen (10 Münzen)</button></div>
+    <div class="list">${crew || '<div class="muted">Noch keine Begleiter. Die erste Crew wartet auf dich.</div>'}</div>
+    ${friends ? `<h3 style="margin:18px 0 10px">Freunde</h3><div class="list">${friends}</div>` : ''}`);
+}
+
+function renderStory() {
+  const chapters = state.storyChapters.slice(0, 5).map(c => `<div class="item" style="align-items:flex-start"><div><b>${esc(c.title)}</b><div class="muted" style="margin-top:4px">${esc(c.text)}</div><div class="meta" style="margin-top:6px">${esc(c.source || 'lokal')} · ${new Date(c.created_at || Date.now()).toLocaleString('de-DE')}</div></div></div>`).join('');
+  return moduleCard('story', 'Story', 'Mikro-Kapitel aus Konzepten und Drops', MODULE_UNLOCK.story, `
+    <div class="row" style="margin-bottom:12px"><button class="btn primary small" data-action="next-story">Nächstes Kapitel (+10 XP, 5 Münzen)</button></div>
+    <div class="list">${chapters || '<div class="muted">Noch keine Kapitel.</div>'}</div>`);
+}
+
+function renderDropQueue() {
+  if (!state.dropQueue.length) return '';
+  const items = state.dropQueue.slice(0, 12).map((item, i) => `<div class="item"><div><b>${esc(item.title)}</b><div class="muted">${esc(KIND_LABEL[item.type] || item.type)}${item.text ? ` · ${esc(item.text)}` : ''}</div><div class="meta">+${item.reward_xp || 0} XP · +${item.reward_coins || 0} Münzen</div></div><button class="btn small" data-action="use-drop-item" data-param='{"index":${i}}'>Übernehmen</button></div>`).join('');
+  return `<section class="card glass" style="margin-top:18px"><div class="row between"><div><h2>Drop-Puffer</h2><div class="muted">Unverbrauchte Einträge aus daily_drop.json (${state.dropQueue.length})</div></div><span class="chip">${state.dropQueue.length}</span></div><div class="list" style="margin-top:12px">${items}</div></section>`;
+}
+
+function renderConcepts() {
+  const concepts = state.concepts.map(c => `<div class="item"><div><b>${esc(c.text)}</b><div class="meta">${esc(KIND_LABEL[c.kind] || c.kind)} · ${c.active === false ? 'Pause' : 'Aktiv'}</div></div><button class="icon-btn" data-action="delete-concept" data-param='{"id":"${esc(c.id)}"}' title="Löschen">×</button></div>`).join('');
+  return `<section class="card glass" style="margin-top:18px">
+    <div class="row between"><div><h2>Konzepte</h2><div class="muted">Lokale Ideen für Engine und App (${state.concepts.length})</div></div><span class="chip">${state.concepts.length}</span></div>
+    <div class="row" style="margin-top:12px;align-items:end">
+      <div style="flex:1;min-width:220px"><label for="conceptText">Neues Konzept</label><input id="conceptText" class="input" placeholder="z. B. 5 Minuten Musik und Stretching" autocomplete="off"></div>
+      <div style="width:150px"><label for="conceptKind">Typ</label><select id="conceptKind" class="input">${Object.entries(KIND_LABEL).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></div>
+      <button class="btn cyan" data-action="add-concept">Hinzufügen</button>
+    </div>
+    <div class="list" style="margin-top:14px">${concepts || '<div class="muted">Noch keine Konzepte.</div>'}</div>
+  </section>`;
+}
+
+function renderSync() {
+  const sync = state.lastSync;
+  const syncHtml = sync ? `<div class="item" style="margin-top:12px"><div><b>Letzter Sync</b><div class="muted">${esc(sync.type)} · ${esc(sync.source)} · ${new Date(sync.at).toLocaleString('de-DE')}</div></div><span class="chip">${sync.queue_added ?? 0} neu</span></div>` : '<div class="muted" style="margin-top:10px">Noch kein Sync.</div>';
+  return `<section class="card glass" style="margin-top:18px">
+    <h2>Sync & Export</h2>
+    <div class="grid cols-2">
+      <div>
+        <h3>state.json</h3>
+        <div class="row"><button class="btn primary small" data-action="export-state">Exportieren</button><button class="btn ghost small" data-action="copy-state">Kopieren</button><button class="btn ghost small" data-action="pick-state-file">Importieren</button></div>
+      </div>
+      <div>
+        <h3>daily_drop.json</h3>
+        <div class="row"><button class="btn cyan small" data-action="pick-drop-file">Datei laden</button></div>
+        <div class="row" style="margin-top:8px"><input id="dropUrl" class="input" placeholder="https://…/daily_drop.json" autocomplete="off" style="flex:1"><button class="btn primary small" data-action="import-drop-url">URL</button></div>
+      </div>
+    </div>
+    <div style="margin-top:12px"><label for="dropText">daily_drop.json einfügen (optional)</label><textarea id="dropText" placeholder='{"generated_at":"…","unused_queue":[…],"daily":{…}}'></textarea></div>
+    <div class="row" style="margin-top:10px"><button class="btn cyan" data-action="import-drop-text">Drop-Text importieren</button></div>
+    ${syncHtml}
+    <details style="margin-top:14px"><summary>Tech-Info</summary><div class="muted" style="margin-top:8px;font-size:.85rem">Speicher: ${esc(state.meta.storage || storageMode)} · Concepts: ${state.concepts.length} · Queue: ${state.dropQueue.length} · Drop-Imports: ${state.importedDrops.length}</div></details>
+  </section>`;
+}
+
+function render() {
+  app.innerHTML = `<main>
+    ${renderHero()}
+    <div class="section-title"><h2>Module</h2><span class="chip">Progressiv</span></div>
+    <div class="grid cols-2">
+      ${renderCrate()}
+      ${renderParadise()}
+      ${renderCrew()}
+      ${renderStory()}
+    </div>
+    ${renderDropQueue()}
+    ${renderConcepts()}
+    ${renderSync()}
+    <div class="foot">Dopamin Paradise · lokale 상태-Datei für daily_engine.py</div>
+  </main>`;
+}
+
+function startTask() {
+  const titleInput = document.getElementById('taskTitle');
+  const focusInput = document.getElementById('focusMinutes');
+  const title = (titleInput?.value || '').trim();
+  const focus = Math.max(0, Math.min(240, Number(focusInput?.value) || 0));
+  if (!title) {
+    toast('Bitte zuerst eine Aufgabe eingeben.', 'bad');
+    titleInput?.focus();
+    return;
+  }
+  state.concepts.unshift({ id: uid('concept'), text: title, kind: 'quest', active: true, created_at: nowIso() });
+  state.activeQuest = { id: uid('quest'), title, focus_minutes: focus, reward_xp: 0, reward_coins: 0, source: 'manual', created_at: nowIso() };
+  addXp(10);
+  addCoins(2);
+  persist();
+  burst(innerWidth / 2, innerHeight / 2, 30);
+  toast('Aufgabe gestartet: +10 XP, +2 Münzen', 'good');
+}
+
+function completeQuest(event) {
+  const q = state.activeQuest;
+  if (!q) return;
+  const focus = Math.max(0, Number(q.focus_minutes) || 0);
+  const xp = 40 + focus * 2 + Math.max(0, Number(q.reward_xp) || 0);
+  const coins = 6 + focus + Math.max(0, Number(q.reward_coins) || 0);
+  const result = addXp(xp);
+  addCoins(coins);
+  state.progress.completed += 1;
+  updateStreak();
+  state.crew.forEach(c => { c.mood = Math.min(100, (c.mood || 50) + 6); });
+  state.dropQueue = state.dropQueue.filter(item => item.id !== q.dropId);
+  state.activeQuest = null;
+  persist();
+  burst(event.clientX || innerWidth / 2, event.clientY || innerHeight / 2, 52);
+  toast(`Geschafft! +${xp} XP, +${coins} Münzen${result.leveled ? ` · Level ${result.level} erreicht` : ''}`, 'good');
+}
+
+function usePendingDaily() {
+  const d = state.pendingDaily;
+  if (!d) return;
+  state.activeQuest = {
+    id: uid('quest'),
+    title: String(d.title || d.text || 'Tages-Impuls').slice(0, 140),
+    focus_minutes: Math.max(0, Number(d.focus_minutes || d.focusMinutes) || 15),
+    reward_xp: Math.max(0, Number(d.reward_xp || d.xp) || 0),
+    reward_coins: Math.max(0, Number(d.reward_coins || d.coins) || 0),
+    source: 'daily_drop',
+    dropId: d.id || null,
+    created_at: nowIso()
+  };
+  state.pendingDaily = null;
+  persist();
+  toast('Tages-Impuls als Quest übernommen.', 'good');
+}
+
+function useDropItem(index) {
+  const item = state.dropQueue[index];
+  if (!item) return;
+  state.dropQueue.splice(index, 1);
+  if (item.type === 'story') {
+    addStoryChapter(item.title, item.import_source || 'drop-queue');
+    toast('Story-Eintrag in Kapitel übernommen.', 'good');
+  } else if (item.type === 'loot' || item.type === 'crew' || item.type === 'paradise') {
+    applyLoot({ ...generateLoot(null), title: item.title, text: item.text || 'Drop-Belohnung', rarity: item.rarity || 'rare' });
+    toast('Loot angewendet.', 'good');
+  } else {
+    state.activeQuest = { ...item, id: uid('quest'), source: 'drop_queue', created_at: nowIso() };
+    toast('Quest aus dem Drop-Puffer gestartet.', 'good');
+  }
+  persist();
+}
+
+function addConcept() {
+  const input = document.getElementById('conceptText');
+  const kind = document.getElementById('conceptKind');
+  const text = (input?.value || '').trim();
+  if (!text) {
+    toast('Konzept darf nicht leer sein.', 'bad');
+    input?.focus();
+    return;
+  }
+  state.concepts.unshift({ id: uid('concept'), text: text.slice(0, 220), kind: kind?.value || 'quest', active: true, created_at: nowIso() });
+  persist();
+  toast('Konzept gespeichert.', 'good');
+}
+
+function exportState() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `state-${todayKey()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('state.json exportiert.', 'good');
+}
+
+async function copyState() {
+  const text = JSON.stringify(state, null, 2);
+  try {
+    await navigator.clipboard.writeText(text);
+    toast('state.json in die Zwischenablage kopiert.', 'good');
+  } catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+    toast('state.json kopiert (Fallback).', 'good');
+  }
+}
+
+function pickStateFile() {
+  document.getElementById('stateFile').click();
+}
+
+function pickDropFile() {
+  document.getElementById('dropFile').click();
+}
+
+async function importDropUrl() {
+  const input = document.getElementById('dropUrl');
+  const url = (input?.value || '').trim();
+  if (!url) {
+    toast('Bitte eine URL eintragen.', 'bad');
+    return;
+  }
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    importDropObject(data, url);
+  } catch (e) {
+    toast(`URL-Import fehlgeschlagen: ${e.message}. Nutze Datei/Text-Import.`, 'bad');
+  }
+}
+
+function importDropText() {
+  const ta = document.getElementById('dropText');
+  const text = (ta?.value || '').trim();
+  if (!text) {
+    toast('Bitte JSON einfügen.', 'bad');
+    return;
+  }
+  try {
+    importDropObject(parseJsonText(text, 'daily_drop.json'), 'text-import');
+    if (ta) ta.value = '';
+  } catch (e) {
+    toast(e.message, 'bad');
+  }
+}
+
+function recruitCrew(free = false) {
+  if (!free && state.progress.coins < 25) {
+    toast('Nicht genug Münzen für einen Begleiter (25 nötig).', 'bad');
+    return;
+  }
+  if (!free) addCoins(-25);
+  const name = randomOf(CREW_NAMES);
+  const role = randomOf(CREW_ROLES);
+  state.crew.push({ id: uid('crew'), name: `${name} ${state.crew.length + 1}`, role, mood: 55 + Math.floor(Math.random() * 35), created_at: nowIso() });
+  state.crew = state.crew.slice(-24);
+}
+
+function inviteFriend() {
+  if (state.progress.coins < 10) {
+    toast('Nicht genug Münzen für einen Freund (10 nötig).', 'bad');
+    return;
+  }
+  addCoins(-10);
+  state.friends.push({ id: uid('friend'), name: randomOf(FRIEND_NAMES), created_at: nowIso() });
+  state.friends = state.friends.slice(-24);
+}
+
+document.addEventListener('click', (event) => {
+  const el = event.target.closest('[data-action]');
+  if (!el) return;
+  let param = {};
+  try { param = el.dataset.param ? JSON.parse(el.dataset.param) : {}; } catch (e) { param = {}; }
+  const action = el.dataset.action;
+  if (action === 'start-task') startTask();
+  else if (action === 'complete-quest') completeQuest(event);
+  else if (action === 'cancel-quest') { state.activeQuest = null; persist(); toast('Aufgabe pausiert.', ''); }
+  else if (action === 'use-pending-daily') usePendingDaily();
+  else if (action === 'dismiss-pending-daily') { state.pendingDaily = null; persist(); }
+  else if (action === 'open-crate') openCrate(param.kind === 'daily' ? 'daily' : 'mini', event);
+  else if (action === 'build-plot') {
+    const plot = state.paradise.plots[param.index];
+    if (!plot || plot.built) return;
+    if (state.progress.coins < plot.cost) { toast(`Nicht genug Münzen für ${plot.name} (${plot.cost}).`, 'bad'); return; }
+    addCoins(-plot.cost);
+    plot.built = true;
+    addXp(15);
+    persist();
+    burst(event.clientX, event.clientY, 26);
+    toast(`${plot.name} gebaut!`, 'good');
+  }
+  else if (action === 'recruit-crew') { recruitCrew(false); persist(); toast('Begleiter rekrutiert.', 'good'); }
+  else if (action === 'invite-friend') { inviteFriend(); persist(); toast('Freund eingeladen.', 'good'); }
+  else if (action === 'next-story') {
+    if (state.progress.coins < 5) { toast('Nicht genug Münzen für ein Kapitel (5 nötig).', 'bad'); return; }
+    addCoins(-5);
+    addStoryChapter(activeConcepts()[0]?.text || 'Neue Idee', 'lokal');
+    addXp(10);
+    persist();
+    toast('Neues Kapitel freigeschaltet.', 'good');
+  }
+  else if (action === 'use-drop-item') useDropItem(Number(param.index));
+  else if (action === 'add-concept') addConcept();
+  else if (action === 'delete-concept') {
+    state.concepts = state.concepts.filter(c => c.id !== param.id);
+    persist();
+    toast('Konzept gelöscht.', '');
+  }
+  else if (action === 'export-state') exportState();
+  else if (action === 'copy-state') copyState();
+  else if (action === 'pick-state-file') pickStateFile();
+  else if (action === 'pick-drop-file') pickDropFile();
+  else if (action === 'import-drop-url') importDropUrl();
+  else if (action === 'import-drop-text') importDropText();
+});
+
+document.getElementById('stateFile').addEventListener('change', (event) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      state = normalizeState(parseJsonText(String(reader.result || ''), 'state.json'));
+      persist();
+      toast('state.json importiert.', 'good');
+    } catch (e) {
+      toast(e.message, 'bad');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+});
+
+document.getElementById('dropFile').addEventListener('change', (event) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      importDropObject(parseJsonText(String(reader.result || ''), file.name), file.name);
+    } catch (e) {
+      toast(e.message, 'bad');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+});
+
+state = normalizeState(state);
+render();
+})();
+</script>
+</body>
+</html>

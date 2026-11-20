@@ -1,0 +1,284 @@
+{
+  "version": 1,
+  "generated_at": "2026-11-20T12:15:21+01:00",
+  "date": "2026-11-20",
+  "source": "local_hybrid",
+  "mode": "buffer_sufficient",
+  "buffer_before": 17,
+  "buffer_after": 17,
+  "provider_errors": [],
+  "unused_queue": [
+    {
+      "id": "seed_q1",
+      "type": "quest",
+      "title": "Seed-Quest: 10 Minuten frische Luft",
+      "text": "Beispiel-Puffer für den ersten lokalen Testlauf.",
+      "focus_minutes": 10,
+      "reward_xp": 30,
+      "reward_coins": 5,
+      "rarity": "common",
+      "created_at": "2026-11-20T09:00:00+01:00"
+    },
+    {
+      "id": "seed_q2",
+      "type": "story",
+      "title": "Seed-Story: Die leuchtende Kiste",
+      "text": "Eine Mini-Story als Beispiel für den Drop-Import.",
+      "reward_xp": 15,
+      "reward_coins": 3,
+      "rarity": "rare",
+      "created_at": "2026-11-20T09:00:00+01:00"
+    },
+    {
+      "id": "seed_q3",
+      "type": "loot",
+      "title": "Seed-Loot: Münzregen",
+      "text": "Kleiner Loot-Eintrag für die App.",
+      "reward_xp": 10,
+      "reward_coins": 12,
+      "rarity": "rare",
+      "created_at": "2026-11-20T09:00:00+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_00",
+      "type": "quest",
+      "title": "10 Minuten an die frische Luft #1",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: 10 Minuten an die frische Luft",
+      "focus_minutes": 0,
+      "reward_xp": 31,
+      "reward_coins": 14,
+      "rarity": "common",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_01",
+      "type": "mini_quest",
+      "title": "10 Minuten an die frische Luft #2",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: 10 Minuten an die frische Luft",
+      "focus_minutes": 20,
+      "reward_xp": 37,
+      "reward_coins": 9,
+      "rarity": "common",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_02",
+      "type": "loot",
+      "title": "Eine kleine Errungenschaft notieren #3",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: Eine kleine Errungenschaft notieren",
+      "focus_minutes": 0,
+      "reward_xp": 68,
+      "reward_coins": 22,
+      "rarity": "epic",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_03",
+      "type": "story",
+      "title": "10 Minuten an die frische Luft #4",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: 10 Minuten an die frische Luft",
+      "focus_minutes": 0,
+      "reward_xp": 49,
+      "reward_coins": 5,
+      "rarity": "common",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_04",
+      "type": "paradise",
+      "title": "5 Minuten dehnen #5",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: 5 Minuten dehnen",
+      "focus_minutes": 15,
+      "reward_xp": 25,
+      "reward_coins": 4,
+      "rarity": "common",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_05",
+      "type": "crew",
+      "title": "Erstes Paradies-Beet pflanzen #6",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: Erstes Paradies-Beet pflanzen",
+      "focus_minutes": 10,
+      "reward_xp": 30,
+      "reward_coins": 14,
+      "rarity": "common",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_06",
+      "type": "quest",
+      "title": "5 Minuten dehnen #7",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: 5 Minuten dehnen",
+      "focus_minutes": 25,
+      "reward_xp": 110,
+      "reward_coins": 19,
+      "rarity": "epic",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_07",
+      "type": "mini_quest",
+      "title": "5 Minuten dehnen #8",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: 5 Minuten dehnen",
+      "focus_minutes": 15,
+      "reward_xp": 29,
+      "reward_coins": 10,
+      "rarity": "common",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_08",
+      "type": "loot",
+      "title": "5 Minuten dehnen #9",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: 5 Minuten dehnen",
+      "focus_minutes": 10,
+      "reward_xp": 67,
+      "reward_coins": 16,
+      "rarity": "rare",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_09",
+      "type": "story",
+      "title": "Erstes Paradies-Beet pflanzen #10",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: Erstes Paradies-Beet pflanzen",
+      "focus_minutes": 15,
+      "reward_xp": 171,
+      "reward_coins": 28,
+      "rarity": "legendary",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_10",
+      "type": "paradise",
+      "title": "5 Minuten dehnen #11",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: 5 Minuten dehnen",
+      "focus_minutes": 25,
+      "reward_xp": 27,
+      "reward_coins": 8,
+      "rarity": "common",
+      "created_at": "2026-11-20T10:55:52+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_00",
+      "type": "quest",
+      "title": "Eine kleine Errungenschaft notieren #1",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: Eine kleine Errungenschaft notieren",
+      "focus_minutes": 30,
+      "reward_xp": 44,
+      "reward_coins": 8,
+      "rarity": "common",
+      "created_at": "2026-11-20T10:56:29+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_01",
+      "type": "mini_quest",
+      "title": "10 Minuten an die frische Luft #2",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: 10 Minuten an die frische Luft",
+      "focus_minutes": 10,
+      "reward_xp": 50,
+      "reward_coins": 11,
+      "rarity": "common",
+      "created_at": "2026-11-20T10:56:29+01:00"
+    },
+    {
+      "id": "lq_2026-11-20_02",
+      "type": "loot",
+      "title": "Eine kleine Errungenschaft notieren #3",
+      "text": "Lokaler Hybrid-Impuls auf Basis des Konzepts: Eine kleine Errungenschaft notieren",
+      "focus_minutes": 15,
+      "reward_xp": 49,
+      "reward_coins": 7,
+      "rarity": "rare",
+      "created_at": "2026-11-20T10:56:29+01:00"
+    }
+  ],
+  "daily": {
+    "id": "daily_2026-11-20",
+    "type": "quest",
+    "title": "Tagesimpuls: 5 Minuten dehnen",
+    "text": "Heute reicht ein kleiner Schritt: 5 Minuten dehnen. Danach darf die Kiste aufgehen.",
+    "focus_minutes": 15,
+    "reward_xp": 70,
+    "reward_coins": 15,
+    "source": "local_hybrid",
+    "created_at": "2026-11-20T12:15:21+01:00"
+  },
+  "story": {
+    "id": "story_2026-11-20",
+    "title": "Kapitel 2026-11-20 – 5 Minuten dehnen",
+    "text": "Der Funke „5 Minuten dehnen“ zieht durch die Stadt. Jemand öffnet eine runde Kiste, Lichterketten schalten sich ein, und das Paradies wächst um ein Beet.",
+    "source": "local_hybrid",
+    "created_at": "2026-11-20T12:15:21+01:00"
+  },
+  "crate": {
+    "id": "crate_2026-11-20",
+    "rarity": "common",
+    "source": "local_hybrid",
+    "loot": {
+      "type": "concept",
+      "coins": 15,
+      "xp": 27,
+      "title": "Common-Kisten-Beute",
+      "text": "Ein local erzeugter Loot-Slot für die App."
+    },
+    "created_at": "2026-11-20T12:15:21+01:00"
+  },
+  "history": [
+    {
+      "date": "2026-11-20",
+      "generated_at": "2026-11-20T09:00:00+01:00",
+      "source": "local_hybrid",
+      "mode": "seed",
+      "buffer_before": 3,
+      "buffer_after": 3,
+      "refill": 0,
+      "errors": []
+    },
+    {
+      "date": "2026-11-20",
+      "generated_at": "2026-11-20T10:55:52+01:00",
+      "source": "local_hybrid",
+      "mode": "api_fallback",
+      "buffer_before": 3,
+      "buffer_after": 14,
+      "refill": 11,
+      "errors": [
+        "gemini: Gemini fehlgeschlagen: HTTP Error 404: Not Found"
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "generated_at": "2026-11-20T10:56:07+01:00",
+      "source": "local_hybrid",
+      "mode": "buffer_sufficient",
+      "buffer_before": 14,
+      "buffer_after": 14,
+      "refill": 0,
+      "errors": []
+    },
+    {
+      "date": "2026-11-20",
+      "generated_at": "2026-11-20T10:56:29+01:00",
+      "source": "local_hybrid",
+      "mode": "api_fallback",
+      "buffer_before": 14,
+      "buffer_after": 17,
+      "refill": 3,
+      "errors": [
+        "gemini: Gemini fehlgeschlagen: HTTP Error 404: Not Found"
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "generated_at": "2026-11-20T12:15:21+01:00",
+      "source": "local_hybrid",
+      "mode": "buffer_sufficient",
+      "buffer_before": 17,
+      "buffer_after": 17,
+      "refill": 0,
+      "errors": []
+    }
+  ]
+}

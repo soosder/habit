@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "concepts": [
+    {
+      "id": "c_walk",
+      "text": "10 Minuten an die frische Luft",
+      "kind": "quest",
+      "active": true,
+      "created_at": "2026-11-20T09:00:00+01:00"
+    },
+    {
+      "id": "c_crate",
+      "text": "Eine Mini-Kiste öffnen",
+      "kind": "loot",
+      "active": true,
+      "created_at": "2026-11-20T09:00:00+01:00"
+    },
+    {
+      "id": "c_paradise",
+      "text": "Erstes Paradies-Beet pflanzen",
+      "kind": "paradise",
+      "active": true,
+      "created_at": "2026-11-20T09:00:00+01:00"
+    },
+    {
+      "id": "c_stretch",
+      "text": "5 Minuten dehnen",
+      "kind": "quest",
+      "active": true,
+      "created_at": "2026-11-20T09:05:00+01:00"
+    },
+    {
+      "id": "c_note",
+      "text": "Eine kleine Errungenschaft notieren",
+      "kind": "story",
+      "active": true,
+      "created_at": "2026-11-20T09:05:00+01:00"
+    }
+  ],
+  "progress": {
+    "xp": 0,
+    "coins": 20,
+    "completed": 0,
+    "streak": 0,
+    "lastDay": null
+  },
+  "activeQuest": null,
+  "pendingDaily": null,
+  "dropQueue": [],
+  "seenDropIds": [],
+  "importedDrops": [],
+  "lastCrateTemplate": null,
+  "lastLoot": null,
+  "lastSync": null,
+  "claimedCrates": {},
+  "storyChapters": [
+    {
+      "id": "s0",
+      "title": "Kapitel 0 – Die erste Belohnung",
+      "text": "Du hast das Paradies aktiviert. Jeder kleine Schritt füllt den Himmel mit Licht.",
+      "source": "local",
+      "created_at": "2026-11-20T09:00:00+01:00"
+    }
+  ],
+  "paradise": {
+    "plots": [
+      {
+        "id": "bank",
+        "name": "Sonnenbank",
+        "cost": 15,
+        "built": false
+      },
+      {
+        "id": "lamp",
+        "name": "Lichterkette",
+        "cost": 20,
+        "built": false
+      },
+      {
+        "id": "tree",
+        "name": "Glücksbaum",
+        "cost": 25,
+        "built": false
+      },
+      {
+        "id": "pond",
+        "name": "Klarteich",
+        "cost": 30,
+        "built": false
+      },
+      {
+        "id": "bridge",
+        "name": "Regenbogenbrücke",
+        "cost": 40,
+        "built": false
+      },
+      {
+        "id": "statue",
+        "name": "Dopamin-Skulptur",
+        "cost": 55,
+        "built": false
+      }
+    ]
+  },
+  "crew": [],
+  "friends": [],
+  "meta": {
+    "created_at": "2026-11-20T09:00:00+01:00",
+    "last_engine_seen_at": "2026-11-20T12:15:21+01:00"
+  }
+}
