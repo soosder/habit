@@ -27,11 +27,17 @@ jobs:
         with:
           gradle-version: "8.10.2"
 
-      - name: Build debug APK
+      - name: Build release APK
         working-directory: native-android
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
           set -o pipefail
-          gradle assembleDebug --stacktrace --console=plain 2>&1 | tee build.log
+          echo "$KEYSTORE_BASE64" | base64 -d > app/release.keystore
+          gradle assembleRelease -PversionCode=${{ github.run_number }} -PversionName=1.${{ github.run_number }} --stacktrace --console=plain 2>&1 | tee build.log
 
       - name: Upload build log on failure
         if: failure()
@@ -51,9 +57,31 @@ jobs:
           git commit -m "chore: publish android build log [skip ci]" || true
           git push origin HEAD:main || true
 
-      - name: Upload APK
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd native-android/app/build/outputs/apk/release
+          cp app-release.apk dopamine-paradise.apk
+          gh release create "v${{ github.run_number }}" dopamine-paradise.apk \
+            --title "Dopamin Paradise 1.${{ github.run_number }}" \
+            --notes "Automatischer Build" || \
+          gh release upload "v${{ github.run_number }}" dopamine-paradise.apk --clobber
+
+      - name: Publish version.json
+        run: |
+          cat > version.json <<EOF
+          {"versionCode": ${{ github.run_number }}, "versionName": "1.${{ github.run_number }}", "apkUrl": "https://github.com/soosder/habit/releases/latest/download/dopamine-paradise.apk", "publishedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add version.json
+          git commit -m "chore: bump app version [skip ci]" || true
+          git push origin HEAD:main || true
+
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dopamine-paradise-debug-apk
-          path: native-android/app/build/outputs/apk/debug/app-debug.apk
+          name: dopamine-paradise-apk
+          path: native-android/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error

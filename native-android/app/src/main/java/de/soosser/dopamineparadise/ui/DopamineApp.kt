@@ -65,6 +65,7 @@ import androidx.compose.ui.unit.sp
 import de.soosser.dopamineparadise.data.AppRepository
 import de.soosser.dopamineparadise.data.StateOps
 import de.soosser.dopamineparadise.ui.theme.DopaminePalette
+import de.soosser.dopamineparadise.update.AppUpdater
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import kotlin.math.min
@@ -77,6 +78,8 @@ fun DopamineApp() {
     var tab by remember { mutableStateOf(0) }
     var confettiKey by remember { mutableStateOf(0) }
     var loot by remember { mutableStateOf<JSONObject?>(null) }
+    var updateInfo by remember { mutableStateOf<JSONObject?>(null) }
+    var updateProgress by remember { mutableStateOf<Int?>(null) }
     val scope = rememberCoroutineScope()
     val state = remember(stateJson) { runCatching { JSONObject(stateJson) }.getOrElse { StateOps.defaultState() } }
 
@@ -90,6 +93,27 @@ fun DopamineApp() {
         if (res.ok && res.added > 0) {
             onState(repo.loadState())
             Toast.makeText(context, "Neuer Drop importiert: +${res.added}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        updateInfo = AppUpdater.checkForUpdate()
+    }
+
+    fun startUpdate() {
+        val url = updateInfo?.optString("apkUrl") ?: return
+        if (url.isEmpty()) return
+        updateProgress = 0
+        scope.launch {
+            try {
+                val apk = AppUpdater.download(context.applicationContext, url) { p -> updateProgress = p }
+                updateProgress = null
+                updateInfo = null
+                AppUpdater.install(context, apk)
+            } catch (e: Exception) {
+                updateProgress = null
+                Toast.makeText(context, "Update fehlgeschlagen", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -142,21 +166,67 @@ fun DopamineApp() {
                 }
             }
         ) { padding ->
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
                     .background(Brush.verticalGradient(listOf(Color(0xFF0B1020), Color(0xFF131A33))))
             ) {
-                when (tab) {
-                    0 -> HomeScreen(state, { onState(it) }, { confettiKey++ })
-                    1 -> ModulesScreen(state, { onState(it) }, { loot = it }, { confettiKey++ })
-                    else -> SyncScreen(state, { onState(it) }, repo, scope)
+                UpdateBanner(updateInfo, updateProgress) { startUpdate() }
+                Box(modifier = Modifier.weight(1f)) {
+                    when (tab) {
+                        0 -> HomeScreen(state, { onState(it) }, { confettiKey++ })
+                        1 -> ModulesScreen(state, { onState(it) }, { loot = it }, { confettiKey++ })
+                        else -> SyncScreen(state, { onState(it) }, repo, scope)
+                    }
                 }
             }
         }
         loot?.let { LootDialog(it) { loot = null } }
         ConfettiBurst(trigger = confettiKey)
+    }
+}
+
+@Composable
+private fun UpdateBanner(info: JSONObject?, progress: Int?, onUpdate: () -> Unit) {
+    if (info == null && progress == null) return
+    val versionName = info?.optString("versionName")?.takeIf { it.isNotEmpty() } ?: ""
+    Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+        GlassCard {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Update verfügbar",
+                        color = Color.White,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        text = if (progress != null) "Lade App herunter… $progress%" else "Version $versionName ist bereit",
+                        color = DopaminePalette.Muted,
+                        fontSize = 13.sp
+                    )
+                    if (progress != null) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                        LinearProgressIndicator(
+                            progress = progress / 100f,
+                            modifier = Modifier.fillMaxWidth().height(10.dp).clip(CircleShape),
+                            color = DopaminePalette.Cyan,
+                            trackColor = Color.White.copy(alpha = 0.12f)
+                        )
+                    }
+                }
+                if (progress == null) {
+                    Spacer(modifier = Modifier.width(12.dp))
+                    JellyButton(
+                        text = "Update",
+                        modifier = Modifier.width(110.dp),
+                        textSize = 15.sp,
+                        onClick = onUpdate
+                    )
+                }
+            }
+        }
     }
 }
 
