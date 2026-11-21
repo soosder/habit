@@ -219,7 +219,7 @@ private fun HomeScreen(state: JSONObject, onState: (String) -> Unit, onCelebrate
             StatChip("Serie $streak", Modifier.weight(1f))
         }
         LinearProgressIndicator(
-            progress = { prog },
+            progress = prog,
             modifier = Modifier.fillMaxWidth().height(10.dp).clip(CircleShape),
             color = DopaminePalette.Pink,
             trackColor = Color.White.copy(alpha = 0.12f)
@@ -392,7 +392,7 @@ private fun ModulesScreen(state: JSONObject, onState: (String) -> Unit, onLoot: 
                     Text("Neue Module ab Level 2", color = DopaminePalette.Gold, fontWeight = FontWeight.Black, fontSize = 18.sp)
                     Text("Erledige Aufgaben, um Kisten, Paradies, Crew und Story freizuschalten.", color = DopaminePalette.Muted, fontSize = 14.sp)
                     LinearProgressIndicator(
-                        progress = { StateOps.levelProgress(state) },
+                        progress = StateOps.levelProgress(state),
                         modifier = Modifier.fillMaxWidth().height(10.dp).clip(CircleShape),
                         color = DopaminePalette.Pink,
                         trackColor = Color.White.copy(alpha = 0.12f)

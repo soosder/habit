@@ -134,7 +134,7 @@ fun ConfettiBurst(trigger: Int, modifier: Modifier = Modifier) {
 private fun starPath(size: Size): Path {
     val cx = size.width / 2f
     val cy = size.height / 2f
-    val r = size.minDimension * 0.30f
+    val r = minOf(size.width, size.height) * 0.30f
     val inner = r * 0.45f
     val path = Path()
     for (i in 0 until 10) {
@@ -164,7 +164,7 @@ fun RarityBadge(rarity: String, modifier: Modifier = Modifier) {
                 center = Offset(size.width * 0.35f, size.height * 0.3f),
                 radius = size.width * 0.75f
             ),
-            radius = size.minDimension / 2f,
+            radius = minOf(size.width, size.height) / 2f,
             center = center
         )
         drawPath(path = starPath(size), color = Color.White.copy(alpha = 0.92f))
