@@ -8,6 +8,9 @@ on:
       - ".github/workflows/android-apk.yml"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,6 +40,16 @@ jobs:
           name: build-log
           path: native-android/build.log
           if-no-files-found: warn
+
+      - name: Publish build log to repo on failure
+        if: failure()
+        run: |
+          cp native-android/build.log build-error.log
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add build-error.log
+          git commit -m "chore: publish android build log [skip ci]" || true
+          git push origin HEAD:main || true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
