@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "generated_at": "2026-11-20T12:15:21+01:00",
-  "date": "2026-11-20",
+  "generated_at": "2026-11-21T17:33:24+01:00",
+  "date": "2026-11-21",
   "source": "local_hybrid",
   "mode": "buffer_sufficient",
   "buffer_before": 17,
@@ -195,35 +195,35 @@
     }
   ],
   "daily": {
-    "id": "daily_2026-11-20",
+    "id": "daily_2026-11-21",
     "type": "quest",
-    "title": "Tagesimpuls: 5 Minuten dehnen",
-    "text": "Heute reicht ein kleiner Schritt: 5 Minuten dehnen. Danach darf die Kiste aufgehen.",
-    "focus_minutes": 15,
-    "reward_xp": 70,
-    "reward_coins": 15,
+    "title": "Tagesimpuls: Erstes Paradies-Beet pflanzen",
+    "text": "Heute reicht ein kleiner Schritt: Erstes Paradies-Beet pflanzen. Danach darf die Kiste aufgehen.",
+    "focus_minutes": 20,
+    "reward_xp": 80,
+    "reward_coins": 18,
     "source": "local_hybrid",
-    "created_at": "2026-11-20T12:15:21+01:00"
+    "created_at": "2026-11-21T17:33:24+01:00"
   },
   "story": {
-    "id": "story_2026-11-20",
-    "title": "Kapitel 2026-11-20 – 5 Minuten dehnen",
-    "text": "Der Funke „5 Minuten dehnen“ zieht durch die Stadt. Jemand öffnet eine runde Kiste, Lichterketten schalten sich ein, und das Paradies wächst um ein Beet.",
+    "id": "story_2026-11-21",
+    "title": "Kapitel 2026-11-21 – Erstes Paradies-Beet pflanzen",
+    "text": "Der Funke „Erstes Paradies-Beet pflanzen“ zieht durch die Stadt. Jemand öffnet eine runde Kiste, Lichterketten schalten sich ein, und das Paradies wächst um ein Beet.",
     "source": "local_hybrid",
-    "created_at": "2026-11-20T12:15:21+01:00"
+    "created_at": "2026-11-21T17:33:24+01:00"
   },
   "crate": {
-    "id": "crate_2026-11-20",
+    "id": "crate_2026-11-21",
     "rarity": "common",
     "source": "local_hybrid",
     "loot": {
-      "type": "concept",
+      "type": "crew",
       "coins": 15,
-      "xp": 27,
+      "xp": 23,
       "title": "Common-Kisten-Beute",
       "text": "Ein local erzeugter Loot-Slot für die App."
     },
-    "created_at": "2026-11-20T12:15:21+01:00"
+    "created_at": "2026-11-21T17:33:24+01:00"
   },
   "history": [
     {
@@ -273,6 +273,16 @@
     {
       "date": "2026-11-20",
       "generated_at": "2026-11-20T12:15:21+01:00",
+      "source": "local_hybrid",
+      "mode": "buffer_sufficient",
+      "buffer_before": 17,
+      "buffer_after": 17,
+      "refill": 0,
+      "errors": []
+    },
+    {
+      "date": "2026-11-21",
+      "generated_at": "2026-11-21T17:33:24+01:00",
       "source": "local_hybrid",
       "mode": "buffer_sufficient",
       "buffer_before": 17,

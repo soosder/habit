@@ -123,7 +123,7 @@ def queue_item(rng: random.Random, index: int, concept: str, item_type: str, cre
     mult = {"common": 1, "rare": 1.5, "epic": 2.2, "legendary": 3.5}[rarity]
     focus = rng.choice([0, 10, 15, 20, 25, 30])
     return {
-        "id": f"lq_{today_str()}_{index:02d}",
+        "id": f"lq_{today_str()}_{index:02d}_{int(hashlib.sha256(f'{created}|{concept}|{item_type}|{index}'.encode('utf-8')).hexdigest()[:8], 16)}",
         "type": item_type if item_type in QUEUE_TYPES else "quest",
         "title": f"{concept} #{index + 1}",
         "text": f"Lokaler Hybrid-Impuls auf Basis des Konzepts: {concept}",
@@ -304,7 +304,7 @@ def normalize_queue_items(items, fallback_concept: str, created: str, start_inde
             rarity = "common"
         out.append(
             {
-                "id": str(raw.get("id") or f"api_{today_str()}_{start_index + i:02d}"),
+                "id": str(raw.get("id") or f"api_{today_str()}_{start_index + i:02d}_{int(hashlib.sha256((str(raw.get('title') or raw.get('name') or '') + '|' + created + '|' + str(i)).encode('utf-8')).hexdigest()[:8], 16)}"),
                 "type": item_type,
                 "title": str(raw.get("title") or raw.get("name") or f"{fallback_concept} #{i + 1}")[:140],
                 "text": str(raw.get("text") or raw.get("description") or "")[:500],

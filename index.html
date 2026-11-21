@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b1020">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Dopamin Paradise</title>
 <style>
   :root{
@@ -241,6 +245,7 @@ function defaultState() {
     lastCrateTemplate: null,
     lastLoot: null,
     lastSync: null,
+    lastDropSignature: null,
     claimedCrates: {},
     storyChapters: [
       { id: uid('story'), title: 'Kapitel 0 – Die erste Belohnung', text: 'Du hast das Paradies aktiviert. Jeder kleine Schritt füllt den Himmel mit Licht.', source: 'local', created_at: nowIso() }
@@ -285,6 +290,7 @@ function normalizeState(input) {
     lastCrateTemplate: s.lastCrateTemplate && typeof s.lastCrateTemplate === 'object' ? s.lastCrateTemplate : null,
     lastLoot: s.lastLoot && typeof s.lastLoot === 'object' ? s.lastLoot : null,
     lastSync: s.lastSync && typeof s.lastSync === 'object' ? s.lastSync : null,
+    lastDropSignature: typeof s.lastDropSignature === 'string' ? s.lastDropSignature : null,
     claimedCrates: s.claimedCrates && typeof s.claimedCrates === 'object' ? s.claimedCrates : {},
     storyChapters: ensureArray(s.storyChapters).slice(0, 80),
     paradise: {
@@ -523,8 +529,22 @@ function normalizeDropObject(input) {
   };
 }
 
+function signatureFromRaw(data) {
+  const queue = Array.isArray(data?.unused_queue) ? data.unused_queue : (Array.isArray(data?.queue) ? data.queue : []);
+  return [
+    data?.date || '',
+    data?.generated_at || '',
+    data?.buffer_after ?? queue.length,
+    queue.length,
+    data?.daily?.id || '',
+    data?.story?.id || '',
+    data?.crate?.id || ''
+  ].join('|');
+}
+
 function importDropObject(input, sourceName) {
   const drop = normalizeDropObject(input);
+  const signature = signatureFromRaw(input);
   const seen = new Set(state.seenDropIds || []);
   let added = 0;
   for (const item of drop.unused_queue) {
@@ -563,7 +583,8 @@ function importDropObject(input, sourceName) {
     state.storyChapters = state.storyChapters.slice(0, 80);
   }
   if (drop.crate) state.lastCrateTemplate = drop.crate;
-  state.lastSync = { type: 'daily_drop', source: sourceName, at: nowIso(), queue_added: added, buffer_before: drop.buffer_before, buffer_after: drop.buffer_after };
+  state.lastDropSignature = signature;
+  state.lastSync = { type: 'daily_drop', source: sourceName, at: nowIso(), queue_added: added, buffer_before: drop.buffer_before, buffer_after: drop.buffer_after, signature };
   persist();
   toast(`Drop importiert: ${added} neue Queue-Einträge.`, 'good');
   burst(innerWidth / 2, innerHeight / 2, 24);
@@ -882,6 +903,20 @@ function importDropText() {
   }
 }
 
+async function maybeAutoSyncDrop() {
+  if (!/^https?:$/.test(location.protocol)) return;
+  try {
+    const url = new URL('daily_drop.json', location.href);
+    url.searchParams.set('sync', String(Date.now()));
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const signature = signatureFromRaw(data);
+    if (signature && signature === state.lastDropSignature) return;
+    importDropObject(data, url.pathname);
+  } catch (e) {}
+}
+
 function recruitCrew(free = false) {
   if (!free && state.progress.coins < 25) {
     toast('Nicht genug Münzen für einen Begleiter (25 nötig).', 'bad');
@@ -986,6 +1021,10 @@ document.getElementById('dropFile').addEventListener('change', (event) => {
 
 state = normalizeState(state);
 render();
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+}
+maybeAutoSyncDrop();
 })();
 </script>
 </body>
