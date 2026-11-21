@@ -1,0 +1,1 @@
+# Dopamin Paradise ProGuard rules

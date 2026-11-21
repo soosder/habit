@@ -91,3 +91,16 @@ python -m http.server 8000 --bind 0.0.0.0
 ```
 
 `ipconfig` → IPv4-Adresse notieren, am Handy `http://<IP>:8000` öffnen. Das funktioniert nur, solange PC und Server laufen; für den Dauerbetrieb bleibt GitHub Pages die bessere Lösung.
+
+## 7) Native Android App (optional, parallel zur Web-App)
+
+Unter `native-android/` liegt eine echte native App (Kotlin + Jetpack Compose). Sie wird **nicht** lokal gebaut, sondern per GitHub Actions in der Cloud.
+
+Ablauf:
+
+1. Änderungen committen und pushen (Pfad `native-android/**` löst den Workflow aus).
+2. Auf GitHub: **Actions → Android APK** → neuesten Lauf öffnen.
+3. **Artifacts → dopamine-paradise-debug-apk** herunterladen.
+4. APK aufs Handy übertragen und installieren (einmalig „Installieren aus unbekannten Quellen" erlauben).
+
+Die App lädt `daily_drop.json` automatisch von `https://soosder.github.io/habit/daily_drop.json`. Detaillierte Anleitung: `native-android/README.md`.
