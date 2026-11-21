@@ -149,9 +149,9 @@ fun DopamineApp() {
                     .background(Brush.verticalGradient(listOf(Color(0xFF0B1020), Color(0xFF131A33))))
             ) {
                 when (tab) {
-                    0 -> HomeScreen(state, onState, { confettiKey++ })
-                    1 -> ModulesScreen(state, onState, { loot = it }, { confettiKey++ })
-                    else -> SyncScreen(state, onState, repo, scope)
+                    0 -> HomeScreen(state, { onState(it) }, { confettiKey++ })
+                    1 -> ModulesScreen(state, { onState(it) }, { loot = it }, { confettiKey++ })
+                    else -> SyncScreen(state, { onState(it) }, repo, scope)
                 }
             }
         }
@@ -376,7 +376,7 @@ private fun GlassCard(content: @Composable ColumnScope.() -> Unit) {
 
 @Composable
 private fun ModulesScreen(state: JSONObject, onState: (String) -> Unit, onLoot: (JSONObject) -> Unit, onConfetti: () -> Unit) {
-    fun commit() { onState(state.toString()) }
+    val commit: () -> Unit = { onState(state.toString()) }
     val level = StateOps.level(state)
 
     Column(
